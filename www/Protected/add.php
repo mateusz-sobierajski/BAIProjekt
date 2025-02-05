@@ -5,12 +5,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
     $email = $_POST['email'];
 
-    $sql = "INSERT INTO users (name, email) VALUES ('$name', '$email')";
-    if ($conn->multi_query($sql) === TRUE) {
+    $stmt = $conn->prepare("INSERT INTO users (name, email) VALUES (?, ?)");
+    $stmt->bind_param("ss", $name, $email);
+
+    if ($stmt->execute() === TRUE) {
         header("Location: index.php");
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: " . $stmt . "<br>" . $conn->error;
     }
+
+    $stmt->close();
 }
 ?>
 
@@ -23,9 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <h2>Add New User</h2>
 <form method="post">
     Name: <input type="text" name="name" required><br>
-    Email: <input type="text" name="email" required><br>
+    Email: <input type="email" name="email" required><br>
     <input type="submit" value="Add">
 </form>
 </body>
 </html>
-
