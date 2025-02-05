@@ -6,3 +6,7 @@ SQL Injection
         - Username: a, Email: '; DROP TABLE users; --
     * Delete:
         - localhost:8899/Vulnerable/delete.php?id=1 OR 1=1
+
+XSS
+    * Add:
+        - <script>alert('Hacked!');</script>

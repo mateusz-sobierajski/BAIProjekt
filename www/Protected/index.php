@@ -23,9 +23,9 @@ $result = $conn->query($sql);
     </tr>
     <?php while ($row = $result->fetch_assoc()) { ?>
         <tr>
-            <td><?= $row['id'] ?></td>
-            <td><?= $row['name'] ?></td>
-            <td><?= $row['email'] ?></td>
+            <td><?= htmlspecialchars($row['id'], ENT_QUOTES, 'UTF-8') ?></td>
+            <td><?= htmlspecialchars($row['name'], ENT_QUOTES, 'UTF-8') ?></td>
+            <td><?= htmlspecialchars($row['email'], ENT_QUOTES, 'UTF-8') ?></td>
             <td>
                 <a href="edit.php?id=<?= $row['id'] ?>">Edit</a> |
                 <a href="delete.php?id=<?= $row['id'] ?>" onclick="return confirm('Are you sure?')">Delete</a>
