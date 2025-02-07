@@ -1,5 +1,6 @@
 <?php
 include 'config.php';
+include 'csrf.php';
 
 // Validate 'id' to ensure it's an integer
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
@@ -15,8 +16,13 @@ if ($id > 0) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($user)) {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
+
+    if (!verify_csrf_token($_POST['csrf_token'])) {
+        die("CSRF token validation failed!");
+    }
+
+    $name = htmlspecialchars($_POST['name']);
+    $email = htmlspecialchars($_POST['email']);
 
     // Use prepared statement to update the user
     $stmt = $conn->prepare("UPDATE users SET name=?, email=? WHERE id=?");
@@ -38,6 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($user)) {
 <body>
 <h2>Edit User</h2>
 <form method="post">
+    <input type="hidden" name="csrf_token" value="<?= generate_csrf_token() ?>">
     Name: <input type="text" name="name" value="<?= htmlspecialchars($user['name']) ?>" required><br>
     Email: <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required><br>
     <input type="submit" value="Update">

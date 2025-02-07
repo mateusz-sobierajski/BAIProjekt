@@ -9,4 +9,4 @@ SQL Injection
 
 XSS
     * Add:
-        - <script>alert('Hacked!');</script>
+        - <script>alert("Hacked!");</script>

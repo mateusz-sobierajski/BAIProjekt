@@ -1,5 +1,6 @@
 <?php
 include 'config.php';
+include 'csrf.php';
 
 // Fetch users
 $sql = "SELECT * FROM users";
@@ -27,8 +28,19 @@ $result = $conn->query($sql);
             <td><?= htmlspecialchars($row['name'], ENT_QUOTES, 'UTF-8') ?></td>
             <td><?= htmlspecialchars($row['email'], ENT_QUOTES, 'UTF-8') ?></td>
             <td>
-                <a href="edit.php?id=<?= $row['id'] ?>">Edit</a> |
-                <a href="delete.php?id=<?= $row['id'] ?>" onclick="return confirm('Are you sure?')">Delete</a>
+                <form action="edit.php" method="GET" style="display:inline;">
+                    <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                    <button type="submit">Edit</button>
+                </form>
+
+
+                <form action="delete.php" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?')">
+                    <input type="hidden" name="csrf_token" value="<?= generate_csrf_token() ?>">
+                    <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                    <button type="submit">Delete</button>
+                </form>
+
+
             </td>
         </tr>
     <?php } ?>

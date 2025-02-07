@@ -1,7 +1,13 @@
 <?php
 include 'config.php';
+include 'csrf.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    if (!verify_csrf_token($_POST['csrf_token'])) {
+        die("CSRF token validation failed!");
+    }
+
     $name = $_POST['name'];
     $email = $_POST['email'];
 
@@ -26,6 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 <h2>Add New User</h2>
 <form method="post">
+    <input type="hidden" name="csrf_token" value="<?= generate_csrf_token() ?>">
     Name: <input type="text" name="name" required><br>
     Email: <input type="email" name="email" required><br>
     <input type="submit" value="Add">
