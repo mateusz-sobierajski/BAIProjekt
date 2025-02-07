@@ -8,8 +8,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("CSRF token validation failed!");
     }
 
-    $name = $_POST['name'];
-    $email = $_POST['email'];
+    $name = filter_var($_POST['name'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
 
     $stmt = $conn->prepare("INSERT INTO users (name, email) VALUES (?, ?)");
     $stmt->bind_param("ss", $name, $email);
